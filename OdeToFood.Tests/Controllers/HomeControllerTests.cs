@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OdeToFood.Controllers;
 using OdeToFood.Models;
@@ -13,18 +15,30 @@ namespace OdeToFood.Controllers.Tests
     [TestClass()]
     public class HomeControllerTests
     {
+        private static ILogger<HomeController> _logger;
+        public HomeControllerTests()
+        {
+            var serviceProvider = new ServiceCollection()
+                .AddLogging()
+                .BuildServiceProvider();
+            var factory = serviceProvider.GetService<ILoggerFactory>();
+            _logger = factory.CreateLogger<HomeController>();
+
+        }
+
         [TestMethod()]
         public void AboutTest()
-        {
-            //Arrange
+        {   //arrange
             HomeController controller = new HomeController();
-            //Act
-            ViewResult result = controller.About() as ViewResult;
-            //Assert
-            Assert.IsNotNull(result.Model);
-            AboutModel aboutModel = result.Model as AboutModel;
-            Assert.AreEqual("Risto",aboutModel.Name);
 
+
+            //act
+            ViewResult Result = controller.About() as ViewResult;
+
+            //assert
+            Assert.IsNotNull(Result.Model);
+            AboutModel aboutModel = Result.Model as AboutModel;
+            Assert.AreEqual("Risto", aboutModel.Name);
         }
     }
 }
