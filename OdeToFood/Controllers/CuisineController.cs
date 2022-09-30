@@ -14,6 +14,7 @@ namespace OdeToFood.Controllers
             var message = HtmlEncoder.Default.Encode(name);
             
             return Content(message);
+            return File("/css/site.css", "text/css");
         }
     }
 }
