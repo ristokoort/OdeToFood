@@ -10,7 +10,7 @@ namespace OdeToFood.ViewComponents
     public class BestReviewViewComponent:ViewComponent
     {
 
-        public async Task<IViewComponentResult> InvokeAsync(IList<RestaurantReview> reviews)
+        public IViewComponentResult Invoke(IList<RestaurantReview> reviews)
         {
             var bestReview = from r in reviews
                              orderby r.Rating descending

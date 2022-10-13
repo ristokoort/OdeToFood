@@ -16,10 +16,10 @@ namespace OdeToFood.Models
                 serviceProvider.GetRequiredService<
                     DbContextOptions<ApplicationDbContext>>()))
             {
-                // Look for any movies.
+               
                 if (context.RestaurantReviews.Any())
                 {
-                    return;   // DB has been seeded
+                    return;   
                 }
 
                 context.Restaurants.AddRange(
