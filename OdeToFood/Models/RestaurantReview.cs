@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace OdeToFood.Models
 {
+
     public class RestaurantReview
     {
         public int Id { get; set; }
