@@ -27,7 +27,7 @@ namespace OdeToFood.Models
     //        return ValidationResult.Success;
     //    }
 
-    }
+   // }
     public class RestaurantReview
     {
         public int Id { get; set; }
