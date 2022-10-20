@@ -24,7 +24,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
                         </li>
@@ -39,7 +39,7 @@
     </header>
     <div class="container"></div>
     <div class="featured">
-        @RenderSection("featured",required:false) 
+        @RenderSection("featured", required: false)
     </div>
     <div class="container">
         <main role="main" class="pb-3">
@@ -48,7 +48,7 @@
     </div>
     <div>
         @*@await Component.InvokeAsync("BestReview",new
-   {reviews=OdeToFood.Controllers.ReviewsController._reviews})*@ 
+            {reviews=OdeToFood.Controllers.ReviewsController._reviews})*@
     </div>
     <footer class="border-top footer text-muted">
         <div class="container">
@@ -57,6 +57,8 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @Html.RenderUnobtrusiveAjaxScript()
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

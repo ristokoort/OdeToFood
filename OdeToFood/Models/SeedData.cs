@@ -50,6 +50,17 @@ namespace OdeToFood.Models
 
 
                 ); 
+                for(int i=0;i<1000;i++)
+                {
+                    context.Restaurants.AddRange(
+                        new Restaurant
+                        {
+                            Name = $"{i}.eatery",
+                            City = "Nowhere",
+                            Country =
+                        "USA"
+                        });
+                }
                 context.SaveChanges();
             }
         }
