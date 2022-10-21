@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace OdeToFood.Controllers
 {
@@ -17,30 +18,37 @@ namespace OdeToFood.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly ILogger<HomeController> _logger;
+       
 
         public HomeController(ILogger<HomeController> logger,ApplicationDbContext dbContext)
         {
             _db = dbContext;
             _logger = logger;
         }
+        public ActionResult Autocomplete(string term)
+        {
+            var model = _db.Restaurants
+            .Where(r => r.Name.StartsWith(term))
+            .Select(r => new { label = r.Name });
+            return Json(model);
+        }
 
-       
-
-        public IActionResult Index(string searchTerm=null)
+        public IActionResult Index(string searchTerm=null,int page =1)
         {
             var model =
                 _db.Restaurants
-                    .OrderByDescending(r =>r.Reviews.Average(review=>review.Rating))
-                    .Where(r=>searchTerm==null||r.Name.StartsWith(searchTerm))
+                    .OrderByDescending(r => r.Reviews.Average(review => review.Rating))
+                    .Where(r => searchTerm == null || r.Name.StartsWith(searchTerm))
                     .Take(10)
-                    .Select(r=>new RestaurantListViewModel
+                    .Select(r => new RestaurantListViewModel
                     {
-                    Id=r.Id,
-                    Name=r.Name,
-                    City=r.City,
-                    Country=r.Country,
-                    CountOfReviews=r.Reviews.Count()
-                    });
+                        Id = r.Id,
+                        Name = r.Name,
+                        City = r.City,
+                        Country = r.Country,
+                        CountOfReviews = r.Reviews.Count()
+                    }
+                    ).ToPagedList(page, 10);
             if(Request.IsAjaxRequest())
             {
                 return PartialView("_Restaurants", model);
