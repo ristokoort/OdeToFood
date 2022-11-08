@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OdeToFood.Data;
 using System;
@@ -63,6 +64,19 @@ namespace OdeToFood.Models
                 }
                 context.SaveChanges();
             }
+        }
+
+        internal static void SeedIdentity(UserManager<OdeToFoodUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            var user = userManager.FindByNameAsync("123@gmail.com").Result;
+            if(user == null)
+            {
+                user = new OdeToFoodUser();
+                user.Email = "123@gmail.com";
+                user.EmailConfirmed = true;
+                
+            }
+            var role = new IdentityRole("Admin");
         }
     }
 }
