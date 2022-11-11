@@ -39,6 +39,7 @@ namespace OdeToFood.Controllers
             }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(RestaurantReview review) 
         {
             if(ModelState.IsValid)

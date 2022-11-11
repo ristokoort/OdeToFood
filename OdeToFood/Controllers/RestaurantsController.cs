@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OdeToFood.Data;
 using OdeToFood.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OdeToFood.Controllers
 {
@@ -44,6 +45,8 @@ namespace OdeToFood.Controllers
         }
 
         // GET: Restaurants/Create
+        // GET: Restaurants/Create
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +57,7 @@ namespace OdeToFood.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = SeedData.ROLE_ADMIN)]
         public async Task<IActionResult> Create([Bind("Id,Name,City,Country")] Restaurant restaurant)
         {
             if (ModelState.IsValid)

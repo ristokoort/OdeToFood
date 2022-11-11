@@ -36,15 +36,16 @@ namespace OdeToFood
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddUnobtrusiveAjax();
 
-            services.AddDefaultIdentity<OdeToFoodUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<OdeToFoodUser, OdeToFoodRole>(options => options.SignIn.RequireConfirmedAccount = false)
+                 .AddDefaultUI()
+                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            SetupAppData(app, env);
+            SetupAppDataAsync(app, env);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -87,17 +88,15 @@ namespace OdeToFood
             });
         }
 
-        private void SetupAppData(IApplicationBuilder app, IWebHostEnvironment env)
+        private async Task SetupAppDataAsync(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-            .CreateScope();
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             using var userManager = serviceScope.ServiceProvider.GetService<UserManager<OdeToFoodUser>>();
-            using var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+            using var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<OdeToFoodRole>>();
             using var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
             if (context == null)
             {
-                throw new ApplicationException("Problem in services.Can not initalize ApplicationDbContext");
+                throw new ApplicationException("Problem in services. Can not initialize ApplicationDbContext");
             }
             while (true)
             {
@@ -109,14 +108,12 @@ namespace OdeToFood
                 }
                 catch (SqlException e)
                 {
-                    if (e.Message.Contains("The Login failed"))
-                    {
-                        break;
-                    }
+                    if (e.Message.Contains("The login failed.")) { break; }
                     System.Threading.Thread.Sleep(1000);
                 }
             }
-            SeedData.SeedIdentity(userManager, roleManager);
+            await SeedData.SeedIdentity(userManager, roleManager);
+            context.SaveChanges();
         }
     }
 }
